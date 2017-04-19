@@ -1,6 +1,6 @@
-# Web API Skeleton
+# Identify API
 
-Skeleton for Dropwizard Web APIs.
+Get an ONID username of a person.
 
 ### Generate Keys
 
