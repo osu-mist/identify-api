@@ -45,28 +45,6 @@ paths:
           description: "Bad request. Query parameter is required."
           schema:
             $ref: '#/definitions/Error'
-  /identify/{osuuid}:
-    get:
-      tags:
-        - identify
-      description: "Get ONID username of a person selected by a query parameter."
-      operationId: getONIDbyOSUUID
-      parameters:
-        - in: path
-          name: osuuid
-          required: true
-          description: "OSUUID of a person."
-          type: string
-        - $ref: '#/parameters/pretty'
-      responses:
-        "200":
-          description: "Successful response"
-          schema:
-            $ref: '#/definitions/ResultObject'
-        "404":
-          description: "Resource not found"
-          schema:
-            $ref: "#/definitions/Error"
             
 parameters:
   pretty:
