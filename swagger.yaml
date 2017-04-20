@@ -100,7 +100,7 @@ definitions:
             type: string
   Attributes:
     properties:
-      onid:
+      username:
         description: "ONID of person"
         type: string
       firstName:
