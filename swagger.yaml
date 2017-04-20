@@ -17,13 +17,23 @@ paths:
     get:
       tags:
         - identify
-      description: "Get ONID username of a person selected by a query parameter."
+      description: "Get ONID username of a person selected by query parameters."
       operationId: getONID
       parameters:
         - in: query
-          name: id
-          required: true
-          description: "PROX_ID or 9 digit OSU ID"
+          name: osuID
+          required: false
+          description: "9 digit OSU ID"
+          type: string
+        - in: query
+          name: facilityCode
+          required: false
+          description: "3 character ID card facility code. Must be used wiith cardID parameter."
+          type: string
+        - in: query
+          name: cardID
+          required: false
+          description: "ID card code. Must be used wiith facilityCode parameter."
           type: string
         - $ref: '#/parameters/pretty'
       responses:
@@ -90,7 +100,7 @@ definitions:
             type: string
   Attributes:
     properties:
-      username:
+      onid:
         description: "ONID of person"
         type: string
       firstName:
