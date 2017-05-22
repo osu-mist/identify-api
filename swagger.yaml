@@ -1,35 +1,51 @@
 swagger: '2.0'
 info:
-  title: Web API Skeleton
-  description: Skeleton for Dropwizard Web APIs
+  title: Identify API
+  description: Get an ONID username of a person.
   version: '0.0'
   license:
     name: GNU Affero General Public License Version 3
     url: http://www.gnu.org/licenses/agpl-3.0.en.html
 externalDocs:
   description: GitHub Repository
-  url: https://github.com/osu-mist/web-api-skeleton
-host: localhost
-schemes:
-  - http
-basePath: /api/v0
-consumes:
-  - text/plain
+  url: https://github.com/osu-mist/identify-api
+basePath: /v1
 produces:
-  - text/plain
+  - application/json
 paths:
-  /:
+  /identify:
     get:
-      summary: Get information
-      description: Build and runtime information about the application.
+      tags:
+        - identify
+      description: "Get ONID username of a person selected by query parameters."
+      operationId: getONID
       parameters:
+        - in: query
+          name: osuID
+          required: false
+          description: "9 digit OSU ID"
+          type: string
+        - in: query
+          name: facilityCode
+          required: false
+          description: "3 character ID card facility code. Must be used wiith cardID parameter."
+          type: string
+        - in: query
+          name: cardID
+          required: false
+          description: "ID card code. Must be used wiith facilityCode parameter."
+          type: string
         - $ref: '#/parameters/pretty'
       responses:
-        200:
-          description: Object containing information
+        "200":
+          description: "Successful response"
           schema:
-            $ref: '#/definitions/Info'
-
+            $ref: '#/definitions/ResultObject'
+        "400":
+          description: "Bad request. Query parameter is required."
+          schema:
+            $ref: '#/definitions/Error'
+            
 parameters:
   pretty:
     name: pretty
@@ -39,23 +55,36 @@ parameters:
     description: If true, JSON response will be pretty-printed
 
 definitions:
-  Info:
+  ResultObject:
     properties:
-      name:
+      data:
+        $ref: "#/definitions/ResourceObject"
+  ResourceObject:
+    properties:
+      id:
+        description: "OSUUID of a person."
         type: string
-        description: Name of the API.
-      time:
+      type:
+        description: "Resource type: person"
         type: string
-        description: Build time in ISO 8601 format.
-      unixTime:
-        type: integer
-        description: Build time as milliseconds since the unix epoch.
-      commit:
+      attributes:
+        $ref: "#/definitions/Attributes"
+      links:
+        properties:
+          self:
+            type: string
+          related:
+            description: "Corresponding self link of person in Directory API"
+            type: string
+  Attributes:
+    properties:
+      username:
+        description: "ONID of person"
         type: string
-        description: Git commit hash of the revision which was built.
-      documentation:
+      firstName:
         type: string
-        description: Filename of the swagger specification for the API.
+      lastName:
+        type: string
   Error:
     properties:
       status:
