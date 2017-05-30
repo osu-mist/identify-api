@@ -3,6 +3,7 @@ package edu.oregonstate.mist.identify
 import edu.oregonstate.mist.api.Application
 import edu.oregonstate.mist.api.Configuration
 import edu.oregonstate.mist.identify.db.IdentifyDAO
+import edu.oregonstate.mist.identify.health.IdentifyHealthCheck
 import io.dropwizard.jdbi.DBIFactory
 import io.dropwizard.setup.Environment
 import org.skife.jdbi.v2.DBI
@@ -25,6 +26,9 @@ class IdentifyApplication extends Application<IdentifyConfiguration> {
         DBI jdbi = factory.build(environment, configuration.getDataSourceFactory(), "jdbi")
         IdentifyDAO identifyDAO = jdbi.onDemand(IdentifyDAO.class)
         environment.jersey().register(new IdentifyResource(identifyDAO))
+
+        IdentifyHealthCheck healthCheck = new IdentifyHealthCheck(identifyDAO)
+        environment.healthChecks().register("identifyHealthCheck", healthCheck)
     }
 
     /**
