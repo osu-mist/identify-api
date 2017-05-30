@@ -18,7 +18,7 @@ public class IdentifyMapper implements ResultSetMapper<ResourceObject> {
                     firstName: rs.getString("FIRST_NAME"),
                     lastName: rs.getString("LAST_NAME")
             ),
-            links: ["related":rs.getString("OSUUID")]
+            links: ["related": rs.getString("OSUUID")]
         )
     }
 }

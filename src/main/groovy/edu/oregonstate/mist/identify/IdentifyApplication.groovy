@@ -25,7 +25,8 @@ class IdentifyApplication extends Application<IdentifyConfiguration> {
         DBIFactory factory = new DBIFactory()
         DBI jdbi = factory.build(environment, configuration.getDataSourceFactory(), "jdbi")
         IdentifyDAO identifyDAO = jdbi.onDemand(IdentifyDAO.class)
-        environment.jersey().register(new IdentifyResource(identifyDAO))
+        environment.jersey().register(new IdentifyResource(identifyDAO,
+                configuration.api.endpointUri))
 
         IdentifyHealthCheck healthCheck = new IdentifyHealthCheck(identifyDAO)
         environment.healthChecks().register("identifyHealthCheck", healthCheck)

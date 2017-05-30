@@ -19,9 +19,11 @@ import javax.ws.rs.core.Response
 @TypeChecked
 class IdentifyResource extends Resource {
     private IdentifyDAO identifyDAO
+    private URI endpointUri
 
-    IdentifyResource(IdentifyDAO identifyDAO) {
+    IdentifyResource(IdentifyDAO identifyDAO, URI endpointUri) {
         this.identifyDAO = identifyDAO
+        this.endpointUri = endpointUri
     }
 
     @Timed
@@ -38,6 +40,9 @@ class IdentifyResource extends Resource {
             return badRequest("osuID cannot be given with any other query parameter.").build()
         } else if ((facilityCode && !cardID) || (!facilityCode && cardID)) {
             return badRequest("facilityCode and cardID must be used together.").build()
+        } else if (facilityCode && cardID &&
+                (!facilityCode.matches("[0-9]+") || !cardID.matches("[0-9]+"))) {
+            return badRequest("facilityCode and cardID may only contain digits").build()
         }
 
         def resultObject = new ResultObject()
@@ -46,6 +51,15 @@ class IdentifyResource extends Resource {
             resultObject.data = identifyDAO.getByOSUID(osuID)
         } else if (!osuID && facilityCode && cardID) {
             resultObject.data = identifyDAO.getByProxID(facilityCode + cardID)
+        }
+
+        try {
+            resultObject.data['links']['related'] =
+                    endpointUri.toString() +
+                    "directory/" +
+                    resultObject.data['links']['related'].toString()
+        } catch (NullPointerException) {
+            null
         }
 
         ok(resultObject).build()
