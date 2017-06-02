@@ -50,7 +50,7 @@ class IdentifyResource extends Resource {
         if (osuID && !facilityCode && !cardID) {
             resultObject.data = identifyDAO.getByOSUID(osuID)
         } else if (!osuID && facilityCode && cardID) {
-            resultObject.data = identifyDAO.getByProxID(facilityCode + cardID)
+            resultObject.data = identifyDAO.getByProxID(facilityCode + "-" + cardID)
         }
 
         if (!resultObject.data) {
