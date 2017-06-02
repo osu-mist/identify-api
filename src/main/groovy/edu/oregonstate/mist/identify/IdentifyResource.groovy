@@ -87,6 +87,9 @@ class IdentifyResource extends Resource {
         if (osuID && (cardID || facilityCode)) {
             addError("osuIDPlus")
         }
+        if (facilityCode && facilityCode?.length() != 3) {
+            addError("facCodeTooLong")
+        }
         if ((facilityCode && !cardID) || (!facilityCode && cardID)) {
             addError("partOfIDCard")
         }
