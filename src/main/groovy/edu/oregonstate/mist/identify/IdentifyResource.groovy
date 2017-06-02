@@ -81,14 +81,14 @@ class IdentifyResource extends Resource {
         if (!osuID && !facilityCode && !cardID) {
             addError("noParams")
         }
-        if (osuID && facilityCode && cardID) {
+        if (osuID && (facilityCode || cardID)) {
             addError("tooManyParams")
         }
-        if (osuID && (cardID || facilityCode)) {
-            addError("osuIDPlus")
+        if (facilityCode && (facilityCode.length() != 3)) {
+            addError("facCodeLength")
         }
-        if (facilityCode && facilityCode?.length() != 3) {
-            addError("facCodeTooLong")
+        if (osuID && (osuID.length() != 9)) {
+            addError("osuIDLength")
         }
         if ((facilityCode && !cardID) || (!facilityCode && cardID)) {
             addError("partOfIDCard")
