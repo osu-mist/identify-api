@@ -42,10 +42,14 @@ paths:
           schema:
             $ref: '#/definitions/ResultObject'
         "400":
-          description: "Bad request. Query parameter is required."
+          description: "Bad request."
+          schema:
+            $ref: '#/definitions/Errors'
+        "404":
+          description: "Not found."
           schema:
             $ref: '#/definitions/Error'
-            
+
 parameters:
   pretty:
     name: pretty
@@ -86,6 +90,7 @@ definitions:
       lastName:
         type: string
   Error:
+    type: object
     properties:
       status:
         type: integer
@@ -102,3 +107,8 @@ definitions:
       details:
         type: string
         description: A link to further information about the error.
+  Errors:
+    title: ArrayOfErrors
+    type: array
+    items:
+      $ref: "#/definitions/Error"
