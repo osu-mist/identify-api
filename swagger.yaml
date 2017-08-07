@@ -13,18 +13,39 @@ basePath: /v1
 produces:
   - application/json
 paths:
-  /identify:
+  /identify/osuID:
     get:
       tags:
         - identify
       description: "Get ONID username of a person selected by query parameters."
-      operationId: getONID
+      operationId: getByOSUID
       parameters:
         - in: query
           name: osuID
           required: false
           description: "9 digit OSU ID"
           type: string
+        - $ref: '#/parameters/pretty'
+      responses:
+        "200":
+          description: "Successful response"
+          schema:
+            $ref: '#/definitions/ResultObject'
+        "400":
+          description: "Bad request."
+          schema:
+            $ref: '#/definitions/Errors'
+        "404":
+          description: "Not found."
+          schema:
+            $ref: '#/definitions/Error'
+  /identify/proxID:
+    get:
+      tags:
+        - identify
+      description: "Get ONID username of a person selected by query parameters."
+      operationId: getByPROXID
+      parameters:
         - in: query
           name: facilityCode
           required: false
