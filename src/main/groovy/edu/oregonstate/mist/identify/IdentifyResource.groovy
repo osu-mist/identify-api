@@ -70,12 +70,11 @@ class IdentifyResource extends Resource {
         }
 
         if (!resultObject.data) {
-            return notFound().build()
+            notFound().build()
+        } else {
+            addRelatedLinks(resultObject)
+            ok(resultObject).build()
         }
-
-        addRelatedLinks(resultObject)
-
-        ok(resultObject).build()
     }
 
     /**
