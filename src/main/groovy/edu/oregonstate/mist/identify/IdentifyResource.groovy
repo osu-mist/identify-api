@@ -51,7 +51,7 @@ class IdentifyResource extends Resource {
      * @param cardID
      * @return
      */
-    private Response createResponse(String osuID,
+    public Response createResponse(String osuID,
                                     String facilityCode,
                                     String cardID) {
         List<Error> errors = getErrors(osuID, facilityCode, cardID)
