@@ -6,8 +6,6 @@ import edu.oregonstate.mist.api.Resource
 import edu.oregonstate.mist.api.jsonapi.ResultObject
 import edu.oregonstate.mist.identify.db.IdentifyDAO
 import groovy.transform.TypeChecked
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 import javax.annotation.security.PermitAll
 import javax.ws.rs.GET
@@ -23,8 +21,6 @@ import javax.ws.rs.core.Response
 @TypeChecked
 class IdentifyResource extends Resource {
 
-    Logger logger = LoggerFactory.getLogger(IdentifyResource.class)
-
     private IdentifyDAO identifyDAO
     private URI endpointUri
 
@@ -33,11 +29,31 @@ class IdentifyResource extends Resource {
         this.endpointUri = endpointUri
     }
 
+    @Path("osuID")
     @Timed
     @GET
-    Response identify(@QueryParam('osuID') String osuID,
-                      @QueryParam('facilityCode') String facilityCode,
-                      @QueryParam('cardID') String cardID) {
+    Response getByOSUID(@QueryParam('osuID') String osuID) {
+        createResponse(osuID, null, null)
+    }
+
+    @Path("proxID")
+    @Timed
+    @GET
+    Response getByPROXID(@QueryParam('facilityCode') String facilityCode,
+                         @QueryParam('cardID') String cardID) {
+        createResponse(null, facilityCode, cardID)
+    }
+
+    /**
+     * Get response data from supplied parameters
+     * @param osuID
+     * @param facilityCode
+     * @param cardID
+     * @return
+     */
+    public Response createResponse(String osuID,
+                                    String facilityCode,
+                                    String cardID) {
         List<Error> errors = getErrors(osuID, facilityCode, cardID)
 
         if (errors) {
@@ -45,7 +61,7 @@ class IdentifyResource extends Resource {
             return responseBuilder.entity(errors).build()
         }
 
-        def resultObject = new ResultObject()
+        ResultObject resultObject = new ResultObject()
 
         if (osuID && !facilityCode && !cardID) {
             resultObject.data = identifyDAO.getByOSUID(osuID)
@@ -54,21 +70,31 @@ class IdentifyResource extends Resource {
         }
 
         if (!resultObject.data) {
-            return notFound().build()
+            notFound().build()
+        } else {
+            addRelatedLinks(resultObject)
+            ok(resultObject).build()
         }
-
-        try {
-            resultObject.data['links']['related'] =
-                    endpointUri.toString() +
-                    "directory/" +
-                    resultObject.data['links']['related'].toString()
-        } catch (NullPointerException) {
-            logger.warn("Related link could not be added. This person might not have an OSUUID.")
-        }
-
-        ok(resultObject).build()
     }
 
+    /**
+     * Helper method to add related links
+     * @param resultObject
+     */
+    private void addRelatedLinks(ResultObject resultObject) {
+        resultObject.data['links']['related'] =
+                resultObject.data['links']['related'] ? endpointUri.toString() +
+                        "directory/" +
+                        resultObject.data['links']['related'] : null
+    }
+
+    /**
+     * Get a list of Error objects from query parameters.
+     * @param osuID
+     * @param facilityCode
+     * @param cardID
+     * @return
+     */
     private List<Error> getErrors(String osuID, String facilityCode, String cardID) {
         List<Error> errors = []
 
@@ -80,9 +106,6 @@ class IdentifyResource extends Resource {
 
         if (!osuID && !facilityCode && !cardID) {
             addError("noParams")
-        }
-        if (osuID && (facilityCode || cardID)) {
-            addError("tooManyParams")
         }
         if (facilityCode && (facilityCode.length() != 3)) {
             addError("facCodeLength")
