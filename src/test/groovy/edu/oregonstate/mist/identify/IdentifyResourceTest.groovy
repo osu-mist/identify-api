@@ -15,6 +15,18 @@ class IdentifyResourceTest {
     IdentifyResource identifyResource = new IdentifyResource(null, selfLinkBase)
 
     /**
+     * Test that a 400 is returned if too many or too little query parameters are given
+     */
+    @Test
+    public void testGetOSUID() {
+        Response tooManyParameters = identifyResource.getOSUID("foobar", 12345678)
+        assert tooManyParameters.status == 400
+
+        Response noParameters = identifyResource.getOSUID(null, 0)
+        assert noParameters.status == 400
+    }
+
+    /**
      * Test that expected error messages for getByOSUID are returned
      */
     @Test
