@@ -48,12 +48,12 @@ paths:
       parameters:
         - in: query
           name: facilityCode
-          required: false
+          required: true
           description: "3 character ID card facility code. Must be used wiith cardID parameter."
           type: string
         - in: query
           name: cardID
-          required: false
+          required: true
           description: "ID card code. Must be used wiith facilityCode parameter."
           type: string
         - $ref: '#/parameters/pretty'
@@ -62,6 +62,37 @@ paths:
           description: "Successful response"
           schema:
             $ref: '#/definitions/ResultObject'
+        "400":
+          description: "Bad request."
+          schema:
+            $ref: '#/definitions/Errors'
+        "404":
+          description: "Not found."
+          schema:
+            $ref: '#/definitions/Error'
+  /identify/getOSUID:
+    get:
+      tags:
+        - identify
+      description: "Get 9 digit OSU ID of a person."
+      operationId: getOSUID
+      parameters:
+        - in: query
+          name: onid
+          required: false
+          description: "ONID of a person."
+          type: string
+        - in: query
+          name: osuUID
+          required: false
+          description: "OSU UID of a person."
+          type: string
+        - $ref: '#/parameters/pretty'
+      responses:
+        "200":
+          description: "Successful response"
+          schema:
+            $ref: '#/definitions/OSUIDResponse'
         "400":
           description: "Bad request."
           schema:
@@ -110,6 +141,18 @@ definitions:
         type: string
       lastName:
         type: string
+  OSUIDResponse:
+    properties:
+      data:
+        properties:
+          id:
+            type: string
+          type:
+            type: string
+          attributes:
+            properties:
+              osuID:
+                type: string
   Error:
     type: object
     properties:

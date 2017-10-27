@@ -3,6 +3,7 @@ package edu.oregonstate.mist.identify
 import com.codahale.metrics.annotation.Timed
 import edu.oregonstate.mist.api.Error
 import edu.oregonstate.mist.api.Resource
+import edu.oregonstate.mist.api.jsonapi.ResourceObject
 import edu.oregonstate.mist.api.jsonapi.ResultObject
 import edu.oregonstate.mist.identify.db.IdentifyDAO
 import groovy.transform.TypeChecked
@@ -27,6 +28,23 @@ class IdentifyResource extends Resource {
     IdentifyResource(IdentifyDAO identifyDAO, URI endpointUri) {
         this.identifyDAO = identifyDAO
         this.endpointUri = endpointUri
+    }
+
+    @Path("getOSUID")
+    @Timed
+    @GET
+    Response getOSUID(@QueryParam('onid') String onid, @QueryParam('osuUID') long osuUID) {
+        if ((!onid && !osuUID) || (onid && osuUID)) {
+            return badRequest("Provide either osuUID or onid as query parameters.").build()
+        }
+
+        ResourceObject osuIDResourceObject = identifyDAO.getOSUID(osuUID, onid)
+
+        if (!osuIDResourceObject) {
+            notFound().build()
+        } else {
+            ok(new ResultObject(data: osuIDResourceObject)).build()
+        }
     }
 
     @Path("osuID")

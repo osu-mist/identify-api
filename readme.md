@@ -1,6 +1,6 @@
 # Identify API
 
-Get an ONID username of a person.
+Get an ONID username or 9 digit OSU ID of a person.
 
 ### Generate Keys
 
