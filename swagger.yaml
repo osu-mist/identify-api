@@ -22,7 +22,7 @@ paths:
       parameters:
         - in: query
           name: osuID
-          required: false
+          required: true
           description: "9 digit OSU ID"
           type: string
         - $ref: '#/parameters/pretty'
