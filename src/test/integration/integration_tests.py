@@ -15,9 +15,9 @@ class TestStringMethods(unittest.TestCase):
 
         # Test length of osuID =/= 9
         wrong_len = utils.get_osu_id("0")
-        validate_response(self, wrong_len, 400,
-                          message="osuID must be 9 digits"
-                          )
+        validate_response(
+            self, wrong_len, 400, message="osuID must be 9 digits"
+        )
 
         # Test invalid osuID
         invalid_osu_id = utils.get_osu_id("000000000")
@@ -49,9 +49,9 @@ class TestStringMethods(unittest.TestCase):
 
         # Test length of facilityCode =/= 3
         wrong_length = utils.get_prox_id("1234", "456")
-        validate_response(self, wrong_length, 400,
-                          message="facilityCode must be 3 digits"
-                          )
+        validate_response(
+            self, wrong_length, 400, message="facilityCode must be 3 digits"
+        )
 
         # Test invalid params
         invalid_params = utils.get_prox_id("999", "999999999")
@@ -73,9 +73,9 @@ class TestStringMethods(unittest.TestCase):
         both_params = utils.get_get_osu_id(
             config["valid_onid"], config["valid_osu_uid"]
         )
-        validate_response(self, both_params, 400,
-                          message=provide_either_message
-                          )
+        validate_response(
+            self, both_params, 400, message=provide_either_message
+        )
 
         # Test invalid onid
         invalid_onid = utils.get_get_osu_id("invalidOnid", None)
