@@ -55,5 +55,9 @@ def get_get_osu_id(onid, osuUID):
     return get("getOSUID", {"onid": onid, "osuUID": osuUID})
 
 
+def get_prox_id(fac_code, card_id):
+    return get("proxID", {"facilityCode": fac_code, "cardID": card_id})
+
+
 def url_joiner(url_pieces):
     return "/".join(str(piece).strip("/") for piece in url_pieces)
