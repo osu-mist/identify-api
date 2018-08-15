@@ -42,9 +42,7 @@ def get_oauth2_headers(config):
 
 def get(endpoint, params=None):
     return session.get(
-        url=url_joiner((url, endpoint)),
-        params=params
-    )
+        url=url_joiner((url, endpoint)), params=params)
 
 
 def get_osu_id(osu_id):

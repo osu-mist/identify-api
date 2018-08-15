@@ -11,9 +11,7 @@ class TestStringMethods(unittest.TestCase):
     def test_osuID(self):
         # Test no osuID param
         no_osu_id = utils.get_osu_id(None)
-        validate_response(self, no_osu_id, 400,
-                          message="No query parameters provided"
-                          )
+        validate_response(self, no_osu_id, 400, message=no_params_message)
 
         # Test length of osuID =/= 9
         wrong_len = utils.get_osu_id("0")
@@ -33,9 +31,7 @@ class TestStringMethods(unittest.TestCase):
     def test_proxID(self):
         # Test no params
         no_params = utils.get_prox_id(None, None)
-        validate_response(self, no_params, 400,
-                          message="No query parameters provided"
-                          )
+        validate_response(self, no_params, 400, message=no_params_message)
 
         # Test one param
         one_param = utils.get_prox_id(config["valid_facility_code"], None)
@@ -71,16 +67,14 @@ class TestStringMethods(unittest.TestCase):
     def test_getOSUID(self):
         # Test no params
         no_params = utils.get_get_osu_id(None, None)
-        validate_response(self, no_params, 400,
-                          message="Provide either osuUID or onid"
-                          )
+        validate_response(self, no_params, 400, message=provide_either_message)
 
         # Test both params
         both_params = utils.get_get_osu_id(
             config["valid_onid"], config["valid_osu_uid"]
         )
         validate_response(self, both_params, 400,
-                          message="Provide either osuUID or onid"
+                          message=provide_either_message
                           )
 
         # Test invalid onid
@@ -119,4 +113,7 @@ if __name__ == "__main__":
     config = json.load(open(namespace.input_file))
     utils.set_local_vars(config)
     sys.argv = args
+
+    no_params_message = "No query parameters provided"
+    provide_either_message = "Provide either osuUID or onid"
     unittest.main()
