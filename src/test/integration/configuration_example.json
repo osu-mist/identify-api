@@ -11,5 +11,7 @@
         "token_api_url": "https://api.oregonstate.edu/oauth2/token",
         "client_id": "client_id",
         "client_secret": "client_secret"
-    }
+    },
+    "valid_osu_id": "123456789",
+    "invalid_osu_id": "000000000"
 }

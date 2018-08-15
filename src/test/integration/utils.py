@@ -25,9 +25,6 @@ def set_local_vars(config):
     else:
         session.headers = get_oauth2_headers(config)
 
-    global invalid_id
-    invalid_id = config["invalid_id"]
-
 
 def get_oauth2_headers(config):
     token = "access_token"
@@ -48,6 +45,10 @@ def get(endpoint, params=None):
         url=url_joiner((url, endpoint)),
         params=params
     )
+
+
+def get_osu_id(osu_id):
+    return get("osuID", {"osuID": osu_id})
 
 
 def url_joiner(url_pieces):
