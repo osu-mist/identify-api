@@ -51,5 +51,9 @@ def get_osu_id(osu_id):
     return get("osuID", {"osuID": osu_id})
 
 
+def get_get_osu_id(onid, osuUID):
+    return get("getOSUID", {"onid": onid, "osuUID": osuUID})
+
+
 def url_joiner(url_pieces):
     return "/".join(str(piece).strip("/") for piece in url_pieces)

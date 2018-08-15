@@ -18,7 +18,7 @@ class TestStringMethods(unittest.TestCase):
         validate_response(self, wrong_len, 400, message="osuID must be 9 digits")
 
         # Test invalid osuID
-        invalid_osu_id = utils.get_osu_id(config["invalid_osu_id"])
+        invalid_osu_id = utils.get_osu_id("000000000")
         validate_response(self, invalid_osu_id, 404)
 
         # Test valid osuID
@@ -31,7 +31,31 @@ class TestStringMethods(unittest.TestCase):
 
     # Test GET /getOSUID
     def test_getOSUID(self):
-        pass
+        # Test no params
+        no_params = utils.get_get_osu_id(None, None)
+        validate_response(self, no_params, 400, message="Provide either osuUID or onid")
+
+        # Test both params
+        both_params = utils.get_get_osu_id(
+            config["valid_onid"], config["valid_osu_uid"]
+        )
+        validate_response(self, both_params, 400, message="Provide either osuUID or onid")
+
+        # Test invalid onid
+        invalid_onid = utils.get_get_osu_id("invalidOnid", None)
+        validate_response(self, invalid_onid, 404)
+
+        # Test invalid osuUID
+        invalid_osu_uid = utils.get_get_osu_id(None, "-1")
+        validate_response(self, invalid_osu_uid, 404)
+
+        # Test valid onid
+        valid_onid = utils.get_get_osu_id(config["valid_onid"], None)
+        validate_response(self, valid_onid, 200, "person")
+
+        # Test valid osuUID
+        valid_osu_uid = utils.get_get_osu_id(None, config["valid_osu_uid"])
+        validate_response(self, valid_osu_uid, 200, "person")
 
 
 def validate_response(self, res, code=None, res_type=None, message=None):
@@ -40,8 +64,12 @@ def validate_response(self, res, code=None, res_type=None, message=None):
     if res_type:
         self.assertEqual(res.json()["data"]["type"], res_type)
     if message:
-        self.assertTrue(len(res.json()) == 1)
-        self.assertIn(message, res.json()[0]["developerMessage"])
+        # Try either single error or array containing single error
+        try:
+            self.assertIn(message, res.json()["developerMessage"])
+        except TypeError:
+            self.assertTrue(len(res.json()) == 1)
+            self.assertIn(message, res.json()[0]["developerMessage"])
 
 
 if __name__ == "__main__":
