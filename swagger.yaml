@@ -9,6 +9,7 @@ info:
 externalDocs:
   description: GitHub Repository
   url: https://github.com/osu-mist/identify-api
+host: api.oregonstate.edu
 basePath: /v1
 produces:
   - application/json
