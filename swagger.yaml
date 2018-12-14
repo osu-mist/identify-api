@@ -51,7 +51,7 @@ paths:
         - in: query
           name: facilityCode
           required: true
-          description: "3 character ID card facility code. Must be used wiith cardID parameter."
+          description: "3 or 4 character ID card facility code. Must be used wiith cardID parameter."
           type: string
         - in: query
           name: cardID
