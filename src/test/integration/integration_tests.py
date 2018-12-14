@@ -47,10 +47,11 @@ class TestStringMethods(unittest.TestCase):
                                   "digits"
                           )
 
-        # Test length of facilityCode =/= 3
-        wrong_length = utils.get_prox_id("1234", "456")
+        # Test length of facilityCode =/= 3 or 4
+        wrong_length = utils.get_prox_id("12345", "678")
         validate_response(
-            self, wrong_length, 400, message="facilityCode must be 3 digits"
+            self, wrong_length, 400,
+            message="facilityCode must be 3 or 4 digits"
         )
 
         # Test invalid params
