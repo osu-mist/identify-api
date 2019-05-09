@@ -14,6 +14,7 @@ public class IdentifyMapper implements ResultSetMapper<ResourceObject> {
             id: rs.getString("OSUUID"),
             type: "person",
             attributes: new Attributes(
+                    osuID: rs.getString("OSUID"),
                     username: rs.getString("ONID"),
                     firstName: rs.getString("FIRST_NAME"),
                     lastName: rs.getString("LAST_NAME")

@@ -142,6 +142,9 @@ definitions:
             type: string
   Attributes:
     properties:
+      osuID:
+        description: "OSU ID of person"
+        type: string
       username:
         description: "ONID of person"
         type: string
