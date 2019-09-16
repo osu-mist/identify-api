@@ -86,12 +86,7 @@ class IdentifyResource extends Resource {
         } else if (!osuID && facilityCode && cardID) {
             String proxID
 
-            if (facilityCode.length() == 4) {
-                proxID = "${facilityCode.take(3)}-${facilityCode[-1] + cardID}"
-            } else {
-                proxID = "${facilityCode}-${cardID}"
-            }
-
+            proxID = "${facilityCode}-${cardID}"
             resultObject.data = identifyDAO.getByProxID(proxID)
         }
 
@@ -145,6 +140,9 @@ class IdentifyResource extends Resource {
         if ((facilityCode && !facilityCode.matches("[0-9]+")) ||
                 (cardID && !cardID.matches("[0-9]+"))) {
             addError("idCardNonDigit")
+        }
+        if (facilityCode?.length() == 4 && cardID?.length() != 7) {
+            addError("idCardLength")
         }
 
         errors
