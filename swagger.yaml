@@ -13,6 +13,9 @@ host: api.oregonstate.edu
 basePath: /v1
 produces:
   - application/json
+security:
+  - OAuth2:
+    - full
 paths:
   /identify/osuID:
     get:
@@ -27,7 +30,6 @@ paths:
           description: "9 digit OSU ID"
           type: string
         - $ref: '#/parameters/pretty'
-        - $ref: '#/parameters/authorization'
       responses:
         "200":
           description: "Successful response"
@@ -59,7 +61,6 @@ paths:
           description: "ID card code. Must be used wiith facilityCode parameter."
           type: string
         - $ref: '#/parameters/pretty'
-        - $ref: '#/parameters/authorization'
       responses:
         "200":
           description: "Successful response"
@@ -91,7 +92,6 @@ paths:
           description: "OSU UID of a person."
           type: string
         - $ref: '#/parameters/pretty'
-        - $ref: '#/parameters/authorization'
       responses:
         "200":
           description: "Successful response"
@@ -112,12 +112,13 @@ parameters:
     type: boolean
     required: false
     description: If true, JSON response will be pretty-printed
-  authorization:
-      name: Authorization
-      in: header
-      type: string
-      required: true
-      description: '"Bearer [token]" where [token] is your OAuth2 access token'
+securityDefinitions:
+  OAuth2:
+    type: oauth2
+    flow: application
+    tokenUrl: https://api.oregonstate.edu/oauth2/token
+    scopes:
+      full: Full access to the API
 definitions:
   ResultObject:
     properties:
