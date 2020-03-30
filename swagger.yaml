@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
   title: Identify API
-  description: Get an ONID username of a person.
+  description: Get information about a person using their 9 digit OSU ID.
   version: '0.0'
   license:
     name: GNU Affero General Public License Version 3
